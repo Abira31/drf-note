@@ -2,18 +2,19 @@ from django.http import HttpRequest
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
+from django.views.decorators.csrf import csrf_exempt
 
 from .serializers import NoteSerializer
 
 from notes.models import Note
 @api_view(['GET','POST'])
-def notes_list(request:HttpRequest):
+def notes_list(request):
     if request.method == 'GET':
         notes = Note.objects.all()
         serializer = NoteSerializer(notes,many=True)
         return Response(serializer.data,status=status.HTTP_200_OK)
     elif request.method == 'POST':
-        serializer = NoteSerializer(request.data)
+        serializer = NoteSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data,status=status.HTTP_201_CREATED)
