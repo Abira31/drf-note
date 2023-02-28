@@ -14,6 +14,9 @@ from notes.models import Note
 #         return instance
 
 class NoteSerializer(serializers.ModelSerializer):
+    author = serializers.SerializerMethodField(read_only=True)
+    def get_author(self,obj:Note):
+        return obj.author.id
     class Meta:
         model = Note
         fields = '__all__'

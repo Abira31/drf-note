@@ -64,6 +64,10 @@ class NoteViewSet(viewsets.ModelViewSet):
         serializer = ThinNoteSerializer(notes,many=True,context=context)
         return Response(serializer.data,status=status.HTTP_200_OK)
 
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
+
 
 # @api_view(['GET','PUT','DELETE'])
 # def note(request:HttpRequest,pk):
